@@ -187,6 +187,12 @@ func SetupTestDB(migrationPath string) (*bun.DB, error) {
 		return nil, err
 	}
 
+	// Las migraciones cargan los aportes del Drive de Farizano (usuario chedul).
+	// Los tests cuentan aportes por materia, asi que arrancan sin ellos.
+	if _, err := db.Exec("delete from aporte where alumno_id in (select id from alumno where nombre = 'chedul')"); err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
 
